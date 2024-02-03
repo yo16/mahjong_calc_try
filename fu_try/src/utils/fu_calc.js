@@ -1,7 +1,7 @@
 /* utills/fu_calc.js */
 
 export default function fu_calc({
-    isFuro = true,          /* 鳴いている:ture, 鳴いていない:false */
+    isMenzen = true,        /* 鳴いている:false, 鳴いていない:true */
     isRon = true,           /* ロン上がり:true, ツモ上がり:false */
     mentsu28Minko = 0,      /* 2-8の明刻の数 */
     mentsu28Anko = 0,       /* 2-8の暗刻の数 */
@@ -32,7 +32,7 @@ export default function fu_calc({
     
     // 例外:ピンフの場合はここで確定
     if (isPinfu) {
-        if (!isFuro && !isRon) {
+        if (isMenzen && !isRon) {
             // ピンフツモの役の場合（=ピンフ型+門前ツモ）は20符
             return 20;
         }
@@ -42,7 +42,7 @@ export default function fu_calc({
 
     // 上がり方
     // 副露ロン:0, 門前ロン:10, ツモ:2
-    if (isFuro){
+    if (!isMenzen){
         if (!isRon){
             // (副露)ツモ
             fu_sum += 2;
