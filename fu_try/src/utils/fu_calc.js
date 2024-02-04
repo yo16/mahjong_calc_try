@@ -2,17 +2,17 @@
 
 export default function fu_calc({
     isMenzen = true,        /* 鳴いている:false, 鳴いていない:true */
-    isRon = true,           /* ロン上がり:true, ツモ上がり:false */
-    mentsu28Minko = 0,      /* 2-8の明刻の数 */
-    mentsu28Anko = 0,       /* 2-8の暗刻の数 */
-    mentsu28Minkan = 0,     /* 2-8の明槓の数 */
-    mentsu28Ankan = 0,      /* 2-8の暗槓の数 */
-    mentsu19Minko = 0,      /* 19字牌の明刻の数 */
-    mentsu19Anko = 0,       /* 19字牌の暗刻の数 */
-    mentsu19Minkan = 0,     /* 19字牌の明槓の数 */
-    mentsu19Ankan = 0,      /* 19字牌の暗槓の数 */
-    hasYakuAtama = false,   /* 頭は役牌かどうか */
-    isTankiMachi = false    /* 1枚の上がりかどうか */
+    isRon = true,           /* ロン上がり:true, ツモ上がり(+2):false */
+    mentsu28Minko = 0,      /* 2-8の明刻の数(+2) */
+    mentsu28Anko = 0,       /* 2-8の暗刻の数(+4) */
+    mentsu28Minkan = 0,     /* 2-8の明槓の数(+8) */
+    mentsu28Ankan = 0,      /* 2-8の暗槓の数(+16) */
+    mentsu19Minko = 0,      /* 19字牌の明刻の数(+4) */
+    mentsu19Anko = 0,       /* 19字牌の暗刻の数(+8) */
+    mentsu19Minkan = 0,     /* 19字牌の明槓の数(+16) */
+    mentsu19Ankan = 0,      /* 19字牌の暗槓の数(+32) */
+    hasYakuAtama = false,   /* 頭は役牌かどうか(+2) */
+    isTankiMachi = false    /* 1枚の上がりかどうか(+2) */
 }){
     let fu_sum = 20;
 

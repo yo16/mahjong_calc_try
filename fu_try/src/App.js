@@ -1,10 +1,11 @@
 import { useState } from "react";
+import make_haiso from "./utils/make_haiso";
 
 import "./App.css";
 
 const App = () => {
-    const [isMenzen, setIsMenzen] = useState(true);
     const [isRon, setIsRon] = useState(true);
+    const [haiso, setHaiso] = useState("");
 
     function getRandomInt(max){
         return Math.floor(Math.random() * max);
@@ -14,7 +15,11 @@ const App = () => {
     }
 
     const handleClickMakingQ = () => {
-        setIsMenzen(getRandomBool());
+        // 問題の牌姿を作る
+        const haiso = make_haiso();
+        const haiso_str = haiso.map((e)=>e.hai).join("");
+        setHaiso(haiso_str);
+
         setIsRon(getRandomBool());
     }
 
@@ -22,9 +27,8 @@ const App = () => {
         <>
             <button onClick={handleClickMakingQ}>問題作成</button>
             <hr />
-            <div>{isMenzen?"メンゼン":"フーロ"}</div>
             <div>{isRon?"ロン":"ツモ"}</div>
-            <div className="font-mahjong">qqyyasdm,. 9119 y</div>
+            <div className="font-mahjong">{haiso}</div>
         </>
     );
 };
