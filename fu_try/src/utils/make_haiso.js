@@ -36,7 +36,17 @@ function getRandomHai() {
 function getRandomMentsu() {
     // 鳴いていないか、上家、対面、下家から鳴いたかを選択
     const naki_rate_settings = [6,1,1,1];
-    const naki = getRandomInt(naki_rate_settings[0]+naki_rate_settings[1]+naki_rate_settings[2]+naki_rate_settings[3]);
+    const naki_val = getRandomInt(naki_rate_settings[0]+naki_rate_settings[1]+naki_rate_settings[2]+naki_rate_settings[3]);
+    let naki = 0;
+    if (naki_val<naki_rate_settings[0]){
+        naki = 0;
+    } else if (naki_val<naki_rate_settings[0]+naki_rate_settings[1]){
+        naki = 1;
+    } else if (naki_val<naki_rate_settings[0]+naki_rate_settings[1]+naki_rate_settings[2]){
+        naki = 2;
+    } else {
+        naki = 3;
+    }
     
     // 順子と刻子と槓子を選択
     const rate_settings = [3,3,1];

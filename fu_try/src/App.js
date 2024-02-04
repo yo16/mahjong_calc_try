@@ -1,5 +1,6 @@
 import { useState } from "react";
 import make_haiso from "./utils/make_haiso";
+import pretty_haiso from "./utils/pretty_haiso";
 
 import "./App.css";
 
@@ -17,8 +18,7 @@ const App = () => {
     const handleClickMakingQ = () => {
         // 問題の牌姿を作る
         const haiso = make_haiso();
-        const haiso_str = haiso.map((e)=>e.hai).join("");
-        setHaiso(haiso_str);
+        setHaiso(pretty_haiso(haiso));
 
         setIsRon(getRandomBool());
     }
