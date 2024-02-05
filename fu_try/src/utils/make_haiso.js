@@ -18,11 +18,16 @@ export default function make_haiso() {
                 ...mentsu,
             })
         }
-        console.log(haiso);
 
     } while (!validateHaiso(haiso));  // 牌の数を数えて5つ以上使っていないことを確認
+
+    // 上がり牌を決める
+    const haiso_with_decide = set_agari_hai(haiso);
     
-    return haiso;
+    return {
+        haiso: haiso_with_decide,
+        isRon: getRandomInt(2)===0 ? true : false,
+    };
 };
 
 function getRandomInt(max) {
@@ -95,4 +100,36 @@ function validateHaiStr(s){
         }
     }
     return true;
+}
+
+function set_agari_hai(haiso){
+    const menzen_ments = haiso.filter((m)=>(
+        (m.type==="head") ||
+        (m.type==="body" && m.naki===0 && m.mentsuType!=="kantsu"))
+    );
+    const naki_mentsu = haiso.filter((m)=>(
+        (m.type==="body" && m.naki===0 && m.mentsuType==="kantsu") ||
+        (m.type==="body" && m.naki!==0)
+    ));
+
+    // 上がり牌を持つメンツを決定
+    const menzen_mentsu_agri_i = getRandomInt(menzen_ments.length);
+
+    // 上がり牌を決定
+    const agari_hai_i = getRandomInt(menzen_ments[menzen_mentsu_agri_i].hai.length);
+    
+    // 上がり牌を持つメンツのhaiから上がり牌を除外し
+    // 上がり牌を別に出す
+    let ret_haiso = [...menzen_ments];
+    ret_haiso[menzen_mentsu_agri_i] = {
+        ...menzen_ments[menzen_mentsu_agri_i],
+        hai: menzen_ments[menzen_mentsu_agri_i].hai.substring(0,agari_hai_i) + 
+             menzen_ments[menzen_mentsu_agri_i].hai.substring(agari_hai_i+1),
+        agariHai: menzen_ments[menzen_mentsu_agri_i].hai.charAt(agari_hai_i),
+    };
+
+    return [
+        ...ret_haiso,
+        ...naki_mentsu,
+    ];
 }

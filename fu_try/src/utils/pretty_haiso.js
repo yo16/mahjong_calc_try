@@ -5,7 +5,16 @@ const ALL_HAI_ROTATED = "QWERTYUIOASDFGHJKLZXCVBNM<>!\"#$%&'";
 
 // haiso情報をきれいにした形で返す
 export default function pretty_haiso(haiso) {
-    let pretty_str = "";
+    // 上がり牌
+    const agariHai = haiso.map((m)=>{
+        if ("agariHai" in m) {
+            return m.agariHai;
+        } else {
+            return "";
+        }
+    }).join("");
+
+    let pretty_str = `${agariHai} `;
 
     // 頭
     const atama = haiso.filter((h) => h.type==="head")[0];
@@ -19,7 +28,7 @@ export default function pretty_haiso(haiso) {
             pretty_str: h.hai,
         };
     });
-    let menzen_mentsu_pretty = [...menzen_mentsu];
+    //let menzen_mentsu_pretty = [...menzen_mentsu];
     // 頭＋門前のpretty
     const menzen_str = atama_pretty.pretty_str + menzen_mentsu.map((h)=>h.pretty_str).join("");
     pretty_str += sort_str(menzen_str);
@@ -33,11 +42,9 @@ export default function pretty_haiso(haiso) {
             pretty_str: "9"+h.hai.substr(0,2)+"9",
         }
     });
-    menzen_mentsu_pretty = menzen_mentsu_pretty.concat([...menzen_kan_mentsu]);
+    //menzen_mentsu_pretty = menzen_mentsu_pretty.concat([...menzen_kan_mentsu]);
     // 暗カンのpretty
     pretty_str += " " + menzen_kan_mentsu.map((h) => h.pretty_str).join(" ");
-    console.log(2);
-    console.log(pretty_str);
 
     // 鳴き
     const naki_mentsu = haiso.filter((h)=>(
