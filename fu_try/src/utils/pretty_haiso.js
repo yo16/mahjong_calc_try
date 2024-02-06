@@ -1,7 +1,7 @@
 
-const ALL_HAI         = "qwertyuioasdfghjklzxcvbnm,.1234567";
-                       //マンズ   ソウズ   ピンズ   字
-const ALL_HAI_ROTATED = "QWERTYUIOASDFGHJKLZXCVBNM<>!\"#$%&'";
+const ALL_HAI         = "qwertyuiozxcvbnm,.asdfghjkl1234567";
+const ALL_HAI_ROTATED = "QWERTYUIOZXCVBNM<>ASDFGHJKL!\"#$%&'";
+                       //マンズ   ピンズ   ソウズ   字
 
 // haiso情報をきれいにした形で返す
 export default function pretty_haiso(haiso) {

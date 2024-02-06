@@ -14,7 +14,7 @@ describe("sort_str", () => {
     test("2", () => {
         expect(
             sort_str("qwertyuioasdfghjklzxcvbnm,.1234567qwertyuioasdfghjklzxcvbnm,.1234567")
-        ).toBe("qqwweerrttyyuuiiooaassddffgghhjjkkllzzxxccvvbbnnmm,,..11223344556677");
+        ).toBe("qqwweerrttyyuuiioozzxxccvvbbnnmm,,..aassddffgghhjjkkll11223344556677");
     });
 });
 
@@ -28,6 +28,11 @@ describe("get_rotated_str", () => {
         expect(
             get_rotated_str("2")
         ).toBe("\"");
+    });
+    test("3", () => {
+        expect(
+            get_rotated_str("4")
+        ).toBe("$");
     });
 
     test("1-inverse", () => {

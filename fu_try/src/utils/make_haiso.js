@@ -166,7 +166,7 @@ function getRandomMentsu() {
             haiGL = curTypeStr.charAt(num).repeat(3);
         } else {
             for (let i=0; i<3; i++) {
-                haiGL += curTypeStr.charAt(((naki===i)?9:0) + num);
+                haiGL += curTypeStr.charAt(((naki===i+1)?(color==="z"?7:9):0) + num);
             }
         }
         
@@ -201,7 +201,7 @@ function getRandomMentsu() {
         haiGL = "9" + curTypeStr.charAt(num).repeat(2) + "9";
     } else {
         for (let i=0; i<4; i++) {
-            if (i===(naki===2?3:naki)){
+            if (i===(naki===3?3:naki-1)){
                 haiGL += curTypeStr.charAt(9+num);
             } else {
                 haiGL += curTypeStr.charAt(num);
