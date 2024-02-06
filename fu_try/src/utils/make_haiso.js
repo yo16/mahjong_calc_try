@@ -20,6 +20,7 @@ export default function make_haiso() {
         // 頭
         haiso = [{
             type: "head",
+            naki: 0,
             ...getRandomHai(2)
         }];
 
@@ -48,18 +49,18 @@ function getRandomInt(max) {
 }
 
 function getRandomHai(hai_suu) {
-    const i = getRandomInt(37);
-    const color = (i<10)?"m"
-        :(i<20)?"p"
-        :(i<30)?"s"
+    const h = getRandomInt(34);
+    const color = (h<9)?"m"
+        :(h<18)?"p"
+        :(h<27)?"s"
         :"z";
-    const haiNum = i%10;
+    const num = h%9;
     const hai = STR_MAP.filter(
         (m)=>m.typeMark===color
-    ).map((m)=>m.typeStr[haiNum])[0];
+    ).map((m)=>m.typeStr[num])[0];
     return {
         hai: hai.repeat(hai_suu),
-        haiMj: color + (`${haiNum}`.repeat(hai_suu)),    // majang-core形式
+        haiMj: color + (`${num+1}`.repeat(hai_suu)),    // majang-core形式
         haiGL: hai.repeat(hai_suu),                 // GL-Mahjong形式
     };
 }
@@ -145,19 +146,19 @@ function getRandomMentsu() {
     // 刻子
     } else if (i<rate_settings[0]+rate_settings[1]) {
         // 牌を決める
-        const h = getRandomInt(37);
-        const color = (h<10)?"m"
-            :(h<20)?"p"
-            :(h<30)?"s"
+        const h = getRandomInt(34);
+        const color = (h<9)?"m"
+            :(h<18)?"p"
+            :(h<27)?"s"
             :"z";
-        const num = h%10;
+        const num = h%9;
         
         // 使っている牌
         const curTypeStr = STR_MAP.filter((m) => m.typeMark===color)[0].typeStr;
         const hai = curTypeStr.charAt(num).repeat(3);
         
         // majang-core形式の文字列
-        const haiMj = color + `${num}`.repeat(3) + naki_mark;
+        const haiMj = color + `${num+1}`.repeat(3) + naki_mark;
 
         // GL-Mahjong形式の文字列
         let haiGL = "";
@@ -180,19 +181,19 @@ function getRandomMentsu() {
 
     // 槓子
     // 牌を決める
-    const h = getRandomInt(37);
-    const color = (h<10)?"m"
-        :(h<20)?"p"
-        :(h<30)?"s"
+    const h = getRandomInt(34);
+    const color = (h<9)?"m"
+        :(h<18)?"p"
+        :(h<27)?"s"
         :"z";
-    const num = h%10;
+    const num = h%9;
 
     // 使っている牌
     const curTypeStr = STR_MAP.filter((m) => m.typeMark===color)[0].typeStr;
     const hai = curTypeStr.charAt(num).repeat(4);
 
     // majang-core形式の文字列
-    const haiMj = color + `${num}`.repeat(4) + naki_mark;
+    const haiMj = color + `${num+1}`.repeat(4) + naki_mark;
 
     // GL-Mahjong形式の文字列
     let haiGL = "";
@@ -239,29 +240,33 @@ function validateHaiStr(s){
 
 function set_agari_hai(haiso){
     const menzen_ments = haiso.filter((m)=>(
-        (m.type==="head") ||
-        (m.type==="body" && m.naki===0 && m.mentsuType!=="kantsu"))
+        (m.naki===0 && m.mentsuType!=="kantsu"))
     );
     const naki_mentsu = haiso.filter((m)=>(
-        (m.type==="body" && m.naki===0 && m.mentsuType==="kantsu") ||
-        (m.type==="body" && m.naki!==0)
+        (m.naki!==0) ||
+        (m.naki===0 && m.mentsuType==="kantsu")
     ));
 
     // 上がり牌を持つメンツを決定
     const menzen_mentsu_agri_i = getRandomInt(menzen_ments.length);
 
     // 上がり牌を決定
-    console.log(menzen_ments[menzen_mentsu_agri_i]);
     const agari_hai_i = getRandomInt(menzen_ments[menzen_mentsu_agri_i].hai.length);
     
     // 上がり牌を持つメンツのhaiから上がり牌を除外し
     // 上がり牌を別に出す
     let ret_haiso = [...menzen_ments];
+    const agari_mentsu = menzen_ments[menzen_mentsu_agri_i];
     ret_haiso[menzen_mentsu_agri_i] = {
-        ...menzen_ments[menzen_mentsu_agri_i],
-        hai: menzen_ments[menzen_mentsu_agri_i].hai.substring(0,agari_hai_i) + 
-             menzen_ments[menzen_mentsu_agri_i].hai.substring(agari_hai_i+1),
-        agariHai: menzen_ments[menzen_mentsu_agri_i].hai.charAt(agari_hai_i),
+        ...agari_mentsu,
+        haiMj: agari_mentsu.haiMj.charAt(0) + 
+            agari_mentsu.haiMj.substring(1,agari_hai_i+1) +     // Mjはcolorの１文字分右にずれる
+            agari_mentsu.haiMj.substring(agari_hai_i+2),
+        agariHaiMj: agari_mentsu.haiMj.charAt(0) + 
+            agari_mentsu.haiMj.charAt(agari_hai_i+1),
+        haiGL: agari_mentsu.hai.substring(0,agari_hai_i) + 
+               agari_mentsu.hai.substring(agari_hai_i+1),
+        agariHaiGL: agari_mentsu.hai.charAt(agari_hai_i),
     };
 
     return [

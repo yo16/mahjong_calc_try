@@ -20,8 +20,9 @@ const App = () => {
 
         // 問題の牌姿を作る
         const { haiso, isRon } = make_haiso();
+        //console.log(haiso);
         setHaiso(pretty_haiso(haiso));
-        setRonAgari(isRon);
+        //setRonAgari(isRon);
 
         // スコア計算
         const {fu} = get_score(haiso, localBaKaze, localJiKaze, isRon);

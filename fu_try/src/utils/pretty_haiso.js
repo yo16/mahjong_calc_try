@@ -7,8 +7,8 @@ const ALL_HAI_ROTATED = "QWERTYUIOASDFGHJKLZXCVBNM<>!\"#$%&'";
 export default function pretty_haiso(haiso) {
     // 上がり牌
     const agariHai = haiso.map((m)=>{
-        if ("agariHai" in m) {
-            return m.agariHai;
+        if ("agariHaiGL" in m) {
+            return m.agariHaiGL;
         } else {
             return "";
         }
@@ -16,51 +16,33 @@ export default function pretty_haiso(haiso) {
 
     let pretty_str = `${agariHai} `;
 
-    // 頭
-    const atama = haiso.filter((h) => h.type==="head")[0];
-    const atama_pretty = {...atama, pretty_str:atama.hai};
-    // 暗カン以外の門前のみ
-    const menzen_mentsu = haiso.filter((h)=>(
-        (h.type==="body") && (h.naki===0) && (h.mentsuType!=="kantsu")
-    )).map((h) => {
-        return {
-            ...h,
-            pretty_str: h.hai,
-        };
-    });
-    //let menzen_mentsu_pretty = [...menzen_mentsu];
-    // 頭＋門前のpretty
-    const menzen_str = atama_pretty.pretty_str + menzen_mentsu.map((h)=>h.pretty_str).join("");
-    pretty_str += sort_str(menzen_str);
-
-    // 暗カン
-    const menzen_kan_mentsu = haiso.filter((h)=>(
-        (h.type==="body") && (h.naki===0) && (h.mentsuType==="kantsu")
-    )).map((h) => {
-        return {
-            ...h,
-            pretty_str: "9"+h.hai.substr(0,2)+"9",
-        }
-    });
-    //menzen_mentsu_pretty = menzen_mentsu_pretty.concat([...menzen_kan_mentsu]);
-    // 暗カンのpretty
-    pretty_str += " " + menzen_kan_mentsu.map((h) => h.pretty_str).join(" ");
-
-    // 鳴き
-    const naki_mentsu = haiso.filter((h)=>(
-        (h.type==="body") && (h.naki!==0)
+    // カン以外の面前のみ
+    const menzen_mentsu = haiso.filter((one_haiso) => (
+        (one_haiso.naki === 0) &&
+        (one_haiso.mentsuType !== "kantsu")
     ));
-    const naki_mentsu_pretty = naki_mentsu.map((h) => {
-        return {
-            ...h,
-            pretty_str: h.naki===1 ? 
-                get_rotated_str(h.hai[0]) + h.hai.substring(1)
-                :h.naki===2 ?
-                    h.hai[0] + get_rotated_str(h.hai[1]) + h.hai.substring(2)
-                    :h.hai.substring(0,h.hai.length-1) + get_rotated_str(h.hai[h.hai.length-1])
-        }
-    });
-    pretty_str += " " + naki_mentsu_pretty.map((h) => h.pretty_str).join(" ");
+    // 鳴きとカンのみ
+    const naki_mentsu = haiso.filter((one_haiso) => (
+        (one_haiso.naki !== 0) ||
+        (
+            (one_haiso.naki === 0) &&
+            (one_haiso.mentsuType === "kantsu")
+        )
+    ));
+    //console.log(menzen_mentsu);
+    //console.log(naki_mentsu);
+    const menzen_mentsu_str = menzen_mentsu
+        .map((one_haiso) => one_haiso.haiGL)
+        .join("")
+    ;
+    
+    // 面前のみをソート
+    pretty_str += " " + sort_str(menzen_mentsu_str);
+
+    pretty_str += " " + naki_mentsu
+        .map((one_haiso) => one_haiso.haiGL)
+        .join(" ");
+
 
     return pretty_str;
 }
