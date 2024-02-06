@@ -9,7 +9,7 @@ const App = () => {
     const [haiso, setHaiso] = useState("");
     const [baKaze, setBaKaze] = useState(0);    // 0:東, 1:南
     const [jiKaze, setJiKaze] = useState(0);    // 0:東, 1:南, 2:西, 3:北
-    const [ronAgari, setRonAgar] = useState(true);
+    const [ronAgari, setRonAgari] = useState(true);
 
     const handleClickMakingQ = () => {
         // 風を決定
@@ -21,7 +21,7 @@ const App = () => {
         // 問題の牌姿を作る
         const { haiso, isRon } = make_haiso();
         setHaiso(pretty_haiso(haiso));
-        setRonAgar(isRon);
+        setRonAgari(isRon);
 
         // スコア計算
         const {fu} = get_score(haiso, localBaKaze, localJiKaze, isRon);
