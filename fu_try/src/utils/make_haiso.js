@@ -166,7 +166,7 @@ function getRandomMentsu() {
             haiGL = curTypeStr.charAt(num).repeat(3);
         } else {
             for (let i=0; i<3; i++) {
-                haiGL += curTypeStr.charAt((naki===i)?9:0 + num);
+                haiGL += curTypeStr.charAt(((naki===i)?9:0) + num);
             }
         }
         

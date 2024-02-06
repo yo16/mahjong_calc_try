@@ -15,11 +15,15 @@ export default function get_score(haiso, baKaze, jiKaze, isRon){
             (one_haiso.mentsuType === "kantsu")
         )
     ));
-    let sp_str = menzen_mentsu.map((one_haiso) => {
-        if ("agariHai" in one_haiso) {
-            // 上がり牌を抜いて
-        }
-    })
+    let sp_str = menzen_mentsu
+        .map((one_haiso) => one_haiso.haiMj)
+        .join("")
+    ;
+    sp_str += "," + naki_mentsu
+        .map((one_haiso) => one_haiso.haiMj)
+        .join(",")
+    ;
+
 
 
     /*
@@ -50,9 +54,10 @@ export default function get_score(haiso, baKaze, jiKaze, isRon){
     */
     //sp.zimo()
     let sp = new Shoupai();
-    sp.fromString("p999p123p11p12,p555+");
+    sp.fromString(sp_str);
+    //sp.fromString("p999p123p11p12,p555+");
     //sp.fulou("p555+");
-    //console.log(sp.toString());
+    console.log(sp.toString());
 
     /*
     // 文字列をmajang-core形式に変換

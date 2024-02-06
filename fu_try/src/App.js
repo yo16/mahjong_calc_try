@@ -20,7 +20,7 @@ const App = () => {
 
         // 問題の牌姿を作る
         const { haiso, isRon } = make_haiso();
-        //console.log(haiso);
+        console.log(haiso);
         setHaiso(pretty_haiso(haiso));
         //setRonAgari(isRon);
 
