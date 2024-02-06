@@ -1,9 +1,7 @@
-import {hule, Shoupai} from "@kobalab/majiang-core";
-import {STR_MAP} from "./hai_const.js";
+import {Util, Shoupai, rule} from "@kobalab/majiang-core";
 
 export default function get_score(haiso, baKaze, jiKaze, isRon){
-    // haisoをmajang-core形式に変換
-    // 上がり牌を除いて、haiMjを連結する
+    // haiMjを連結する
     const menzen_mentsu = haiso.filter((one_haiso) => (
         (one_haiso.naki === 0) &&
         (one_haiso.mentsuType !== "kantsu")
@@ -24,39 +22,56 @@ export default function get_score(haiso, baKaze, jiKaze, isRon){
         .join(",")
     ;
 
+    // 上がり牌を得る
+    const agariHaiMj = haiso
+        .filter((one_haiso) => "agariHaiMj" in one_haiso)[0]
+        .agariHaiMj
+    ;
+    console.log(`agari:${agariHaiMj}`);
 
-
-    /*
-    const separeted_haiso = [...haiso.map((h)=>{
-        const separated_one_haiso = [...h.hai].map((hai)=>{
-            const curMap = STR_MAP.filter((map) => map.typeStr.indexOf(hai)>=0)[0];
-            const color = curMap.typeMark;
-            const num = curMap.typeStr.indexOf(hai) + 1;
-
-            return `${color}${num}`;
-        });
-        return separated_one_haiso;
-    })];
-    //const haiso_hai_ary = separeted_haiso.flat();
-    //const haiso_hai_ary = ['p9', 'p9', 'p1', 'p2', 'p3', 's1', 's2', 'p4', 'p5', 'p6', 'z3', 'z3', 'z3'];
-    const haiso_hai_ary = ['p9', 'p9', 'p1', 'p2', 'p3', 's1', 's2', 'p4', 'p5', 'p6', 'z3', 'z3', 'z3'];
-    //console.log(haiso_hai_ary);
-    //let sp = new Shoupai(haiso_hai_ary);
-    //let sp = new Shoupai(haiso.map((h)=>h.haiMj).join(""));
-    let sp = new Shoupai();
-    sp.fromString("p123999z11s12p555");
-    */
-    /*
-    haiso_hai_ary.forEach((h) => {
-        console.log(h);
-        sp = sp.zimo(h);
-    })
-    */
-    //sp.zimo()
+    // Shoupaiインスタンスを作成
     let sp = new Shoupai();
     sp.fromString(sp_str);
-    //sp.fromString("p999p123p11p12,p555+");
-    //sp.fulou("p555+");
+    
+    // 上がり状態を作る
+    let rongPai = null;
+    if (isRon){
+        // ロンの場合はロン牌に設定
+        // 上がった元を上家とする(計算には関係ない)
+        rongPai = agariHaiMj + "-";
+    } else {
+        // ツモの場合はツモる
+        sp.zimo(agariHaiMj);
+    }
+    console.log(`rongPai:${rongPai}:`);
+    console.log(sp.toString());
+
+    // 上がり状態のオプション
+    const agari_option = {
+        rule:           rule(),
+        zhuangfeng:     baKaze,
+        menfeng:        jiKaze,
+        hupai: {    /* 状況役 */
+            lizhi:      0,          /* リーチ なし */
+            yifa:       false,      /* 一発 なし */
+            qianggang:  false,      /* 槍槓 なし */
+            lingshang:  false,      /* 嶺上開花 なし */
+            haidi:      1,          /* ハイテイ なし */
+            tianhu:     0           /* 天和/地和 なし */
+        },
+        baopai:         [ ],   /* ドラ表示牌 1万(符計算には無関係) */
+        fubaopai:       null,       /* 裏ドラ表示牌 なし */
+        jicun: {    /* 供託 */
+            changbang:  0,          /* 点棒 なし */
+            lizhibang:  0           /* リーチ棒 なし */
+        },
+    };
+
+    // 点数計算
+    const score = Util.hule(sp, rongPai, agari_option);
+    console.log(score);
+
+    //sp.zimo(agariHaiMj);
     console.log(sp.toString());
 
     /*
