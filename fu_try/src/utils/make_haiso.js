@@ -1,14 +1,27 @@
+import {STR_MAP} from "./hai_const.js";
 
-const ALL_HAI = "1234567qwertyuioasdfghjklzxcvbnm,.";
-               //0123456789012345678901234567890123
-               //字     マンズ   ソウズ   ピンズ
-
+/* 適当に牌を組み合わせる */
+/*
+haisoは、メンツの配列
+メンツは下記のdict
+{
+    type: ["head":頭, "body":メンツ]
+    mentsuType: bodyのときのみ有効. ["shuntsu", "kohtsu", "kantsu"]
+    naki: 鳴き [0:なし, 1:上家, 2:対面, 3:下家]
+    hai: 純粋な牌の配列. GLの縦向きの値のみを使用して表現する.
+    haiMj: majang-core形式の文字列. 並び方も持つ.
+    haiGL:GL-Mahjong形式の文字列. 並び方も持つ.
+}
+majang-core形式の場合は、全体を正規化する必要がある
+*/
 export default function make_haiso() {
-    /* 適当に牌を組み合わせる */
     let haiso = null;
     do {
         // 頭
-        haiso = [{type:"head", hai:getRandomHai().repeat(2)}];
+        haiso = [{
+            type: "head",
+            ...getRandomHai(2)
+        }];
 
         // body４つ
         for(let i=0; i<4; i++){
@@ -34,23 +47,44 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-function getRandomHai() {
-    return ALL_HAI[getRandomInt(ALL_HAI.length)];
+function getRandomHai(hai_suu) {
+    const i = getRandomInt(37);
+    const color = (i<10)?"m"
+        :(i<20)?"p"
+        :(i<30)?"s"
+        :"z";
+    const haiNum = i%10;
+    const hai = STR_MAP.filter(
+        (m)=>m.typeMark===color
+    ).map((m)=>m.typeStr[haiNum])[0];
+    return {
+        hai: hai.repeat(hai_suu),
+        haiMj: color + (`${haiNum}`.repeat(hai_suu)),    // majang-core形式
+        haiGL: hai.repeat(hai_suu),                 // GL-Mahjong形式
+    };
 }
 
 function getRandomMentsu() {
     // 鳴いていないか、上家、対面、下家から鳴いたかを選択
-    const naki_rate_settings = [6,1,1,1];
+    const naki_rate_settings = [7,1,1,1];
     const naki_val = getRandomInt(naki_rate_settings[0]+naki_rate_settings[1]+naki_rate_settings[2]+naki_rate_settings[3]);
     let naki = 0;
+    const naki_mark_def = "-=+";  // 上家、対面、下家の順
+    let naki_mark = "";
     if (naki_val<naki_rate_settings[0]){
         naki = 0;
-    } else if (naki_val<naki_rate_settings[0]+naki_rate_settings[1]){
-        naki = 1;
-    } else if (naki_val<naki_rate_settings[0]+naki_rate_settings[1]+naki_rate_settings[2]){
-        naki = 2;
     } else {
-        naki = 3;
+        if (naki_val<naki_rate_settings[0]+naki_rate_settings[1]){
+            // 上家
+            naki = 1;
+        } else if (naki_val<naki_rate_settings[0]+naki_rate_settings[1]+naki_rate_settings[2]){
+            // 対面
+            naki = 2;
+        } else {
+            // 下家
+            naki = 3;
+        }
+        naki_mark = naki_mark_def.charAt(naki-1);
     }
     
     // 順子と刻子と槓子を選択
@@ -59,27 +93,128 @@ function getRandomMentsu() {
 
     // 順子
     if (i<rate_settings[0]) {
+        // 鳴くとしたら上家からのみ
+        if (naki>=2){
+            // 鳴かなかったことにする
+            naki = 0;
+            naki_mark = "";
+        }
+
         // 色を0～2で決めて、開始位置を0～6を決めて、そこから順に3つ
-        const color = getRandomInt(3);
-        //console.log("色:"+color);
+        const color_int = getRandomInt(3);
+        const color = "mspz".charAt(color_int);
         const start_num = getRandomInt(7);
-        //console.log("開始:"+start_num);
-        const startPos = 7 + 9*color + start_num;
-        const ret = ALL_HAI.slice(startPos, startPos+3);
-        //console.log("文字列:"+ret);
-        return {mentsuType:"shuntsu", hai:ret, naki};
+        // 鳴いていたら鳴いた牌を決める
+        let naki_pos = -1;
+        if (naki>0){
+            naki_pos = getRandomInt(3);
+        }
+
+        // 使っている牌
+        const curTypeStr = STR_MAP.filter((m) => m.typeMark===color)[0].typeStr;
+        let hai = curTypeStr.substring(start_num, start_num+3);
+
+        // majang-core形式の文字列
+        let haiMj = color;
+        for (let i=0; i<3; i++){
+            haiMj += (start_num+1+i);
+            if (naki_pos===i){
+                haiMj += naki_mark;
+            }
+        }
+
+        // GL-Mahjong形式の文字列
+        let haiGL = "";
+        if (naki===0){
+            haiGL = curTypeStr.substring(start_num, start_num+3);
+        } else {
+            haiGL = curTypeStr[9+start_num+naki_pos]
+                + curTypeStr.substring(start_num, start_num+naki_pos)
+                + curTypeStr.substring(start_num+naki_pos+1, start_num+3);
+        }
+
+        return {
+            mentsuType:"shuntsu",
+            color,
+            hai,
+            haiMj,
+            haiGL,
+            naki,
+        };
 
     // 刻子
     } else if (i<rate_settings[0]+rate_settings[1]) {
-        // 開始位置を0～length-1で決めて、それを3つ
-        const pos = getRandomInt(ALL_HAI.length);
-        return {mentsuType:"kohtsu", hai:ALL_HAI[pos].repeat(3), naki};
+        // 牌を決める
+        const h = getRandomInt(37);
+        const color = (h<10)?"m"
+            :(h<20)?"p"
+            :(h<30)?"s"
+            :"z";
+        const num = h%10;
+        
+        // 使っている牌
+        const curTypeStr = STR_MAP.filter((m) => m.typeMark===color)[0].typeStr;
+        const hai = curTypeStr.charAt(num).repeat(3);
+        
+        // majang-core形式の文字列
+        const haiMj = color + `${num}`.repeat(3) + naki_mark;
+
+        // GL-Mahjong形式の文字列
+        let haiGL = "";
+        if (naki===0) {
+            haiGL = curTypeStr.charAt(num).repeat(3);
+        } else {
+            for (let i=0; i<3; i++) {
+                haiGL += curTypeStr.charAt((naki===i)?9:0 + num);
+            }
+        }
+        
+        return {
+            mentsuType:"kohtsu",
+            hai,
+            haiMj,
+            haiGL,
+            naki,
+        };
     }
 
     // 槓子
-    // 開始位置を0～length-1で決めて、それを4つ
-    const pos = getRandomInt(ALL_HAI.length);
-    return {mentsuType:"kantsu", hai:ALL_HAI[pos].repeat(4), naki};
+    // 牌を決める
+    const h = getRandomInt(37);
+    const color = (h<10)?"m"
+        :(h<20)?"p"
+        :(h<30)?"s"
+        :"z";
+    const num = h%10;
+
+    // 使っている牌
+    const curTypeStr = STR_MAP.filter((m) => m.typeMark===color)[0].typeStr;
+    const hai = curTypeStr.charAt(num).repeat(4);
+
+    // majang-core形式の文字列
+    const haiMj = color + `${num}`.repeat(4) + naki_mark;
+
+    // GL-Mahjong形式の文字列
+    let haiGL = "";
+    if (naki===0) {
+        haiGL = "9" + curTypeStr.charAt(num).repeat(2) + "9";
+    } else {
+        for (let i=0; i<4; i++) {
+            if (i===(naki===2?3:naki)){
+                haiGL += curTypeStr.charAt(9+num);
+            } else {
+                haiGL += curTypeStr.charAt(num);
+            }
+        }
+    }
+
+    return {
+        mentsuType:"kantsu",
+        hai,
+        haiMj,
+        haiGL,
+        naki
+    };
 }
 
 function validateHaiso(ary){
@@ -116,6 +251,7 @@ function set_agari_hai(haiso){
     const menzen_mentsu_agri_i = getRandomInt(menzen_ments.length);
 
     // 上がり牌を決定
+    console.log(menzen_ments[menzen_mentsu_agri_i]);
     const agari_hai_i = getRandomInt(menzen_ments[menzen_mentsu_agri_i].hai.length);
     
     // 上がり牌を持つメンツのhaiから上がり牌を除外し
