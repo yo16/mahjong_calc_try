@@ -1,7 +1,6 @@
 import { useState } from "react";
 import make_haiso from "./utils/make_haiso";
 import pretty_haiso from "./utils/pretty_haiso";
-import get_score from "./utils/get_score";
 
 import "./App.css";
 
@@ -10,23 +9,21 @@ const App = () => {
     const [baKaze, setBaKaze] = useState(0);    // 0:東, 1:南
     const [jiKaze, setJiKaze] = useState(0);    // 0:東, 1:南, 2:西, 3:北
     const [ronAgari, setRonAgari] = useState(true);
+    const [score, setScore] = useState({});
 
     const handleClickMakingQ = () => {
-        // 風を決定
-        const localBaKaze = getRandomInt(2);
-        setBaKaze(localBaKaze);
-        const localJiKaze = getRandomInt(4);
-        setJiKaze(localJiKaze);
-
         // 問題の牌姿を作る
-        const { haiso, isRon } = make_haiso();
+        const { haiso, isRon, baKaze, jiKaze, score } = make_haiso();
         console.log(haiso);
+
+        // 表示形式の文字列を作る
         setHaiso(pretty_haiso(haiso));
+
+        // stateを変更
+        setJiKaze(jiKaze);
+        setBaKaze(baKaze);
         setRonAgari(isRon);
-
-        // スコア計算
-        const {fu} = get_score(haiso, localBaKaze, localJiKaze, isRon);
-
+        setScore(score);
     }
 
     // 風
@@ -47,12 +44,13 @@ const App = () => {
             <div>自風: {haiso===""?"":jiKaze_str}</div>
             <div>{haiso===""?"":ronAgari?"ロン":"ツモ"}</div>
             <div className="font-mahjong">{haiso}</div>
+            <hr />
+            <div>{score.fu}符</div>
+            <div>{score.fanshu}翻</div>
+            <div>{score.defen}点</div>
+            <div>{score.hupai?score.hupai.map((h)=><>{h.name}<br /></>):""}</div>
         </>
     );
 };
-
-function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-}
 
 export default App;

@@ -56,10 +56,10 @@ export default function get_score(haiso, baKaze, jiKaze, isRon){
             yifa:       false,      /* 一発 なし */
             qianggang:  false,      /* 槍槓 なし */
             lingshang:  false,      /* 嶺上開花 なし */
-            haidi:      1,          /* ハイテイ なし */
+            haidi:      0,          /* ハイテイ なし */
             tianhu:     0           /* 天和/地和 なし */
         },
-        baopai:         [ ],   /* ドラ表示牌 1万(符計算には無関係) */
+        baopai:         [],         /* ドラ表示牌 なし */
         fubaopai:       null,       /* 裏ドラ表示牌 なし */
         jicun: {    /* 供託 */
             changbang:  0,          /* 点棒 なし */
@@ -74,23 +74,5 @@ export default function get_score(haiso, baKaze, jiKaze, isRon){
     //sp.zimo(agariHaiMj);
     console.log(sp.toString());
 
-    /*
-    // 文字列をmajang-core形式に変換
-    const mc_str = toMajangCore(haiso, isRon);
-
-    // 手配の
-    const sp = Shoupai(mc_str);
-    */
-
-
-    return {fu:1};
+    return score;
 }
-
-// haiso形式を、majiang-core形式へ変換する
-// ロンの場合
-// https://github.com/kobalab/majiang-core/wiki/Majiang.Util
-// https://github.com/kobalab/majiang-core/wiki/Majiang.Shoupai
-
-function toMajangCore(haiso, isRon){
-    
-};

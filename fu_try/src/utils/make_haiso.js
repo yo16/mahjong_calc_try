@@ -1,4 +1,5 @@
 import {STR_MAP} from "./hai_const.js";
+import get_score from "./get_score";
 
 /* 適当に牌を組み合わせる */
 /*
@@ -15,32 +16,57 @@ haisoは、メンツの配列
 majang-core形式の場合は、全体を正規化する必要がある
 */
 export default function make_haiso() {
-    let haiso = null;
-    do {
-        // 頭
-        haiso = [{
-            type: "head",
-            naki: 0,
-            ...getRandomHai(2)
-        }];
+    let ret_haiso = null;
+    
+    // 風を決める
+    const baKaze = getRandomInt(2);
+    const jiKaze = getRandomInt(4);
 
-        // body４つ
-        for(let i=0; i<4; i++){
-            const mentsu = getRandomMentsu();
-            haiso.push({
-                type: "body",
-                ...mentsu,
-            })
-        }
+    // 上がり方を決める
+    const isRon = getRandomInt(2)===0 ? true : false;
 
-    } while (!validateHaiso(haiso));  // 牌の数を数えて5つ以上使っていないことを確認
+    let defen = 0;
+    let score = null;
+    // 役が１ハン以上あるまで繰り返す
+    while (defen===0) {
+        // 牌姿を決める
+        let try_haiso = [];
+        do {
+            // 頭
+            let haiso = [{
+                type: "head",
+                naki: 0,
+                ...getRandomHai(2)
+            }];
 
-    // 上がり牌を決める
-    const haiso_with_decide = set_agari_hai(haiso);
+            // body４つ
+            for(let i=0; i<4; i++){
+                const mentsu = getRandomMentsu();
+                haiso.push({
+                    type: "body",
+                    ...mentsu,
+                })
+            }
+
+            try_haiso = [...haiso];
+
+        } while (!validateHaiso(try_haiso));  // 牌の数を数えて5つ以上使っていないことを確認
+
+        // 上がり牌を決める
+        ret_haiso = set_agari_hai(try_haiso);
+
+        // スコア計算
+        const local_score = get_score(ret_haiso, baKaze, jiKaze, isRon);
+        defen = local_score.defen;
+        score = local_score;
+    };
     
     return {
-        haiso: haiso_with_decide,
-        isRon: getRandomInt(2)===0 ? true : false,
+        haiso: ret_haiso,
+        isRon,
+        baKaze,
+        jiKaze,
+        score,
     };
 };
 
@@ -89,7 +115,7 @@ function getRandomMentsu() {
     }
     
     // 順子と刻子と槓子を選択
-    const rate_settings = [3,3,1];
+    const rate_settings = [4,3,1];
     const i = getRandomInt(rate_settings[0]+rate_settings[1]+rate_settings[2]);
 
     // 順子
