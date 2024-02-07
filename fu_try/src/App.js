@@ -1,7 +1,7 @@
 import { Link, Routes, Route } from "react-router-dom";
 
 import TopPage from "./pages/topPage";
-import TotalScore from "./TotalScore";
+import TotalScore from "./pages/totalScore";
 import FuMentsu from "./pages/fuMentsu";
 import FuGokei from "./pages/fuGokei";
 import PageNotFound from "./pages/pageNotFound";

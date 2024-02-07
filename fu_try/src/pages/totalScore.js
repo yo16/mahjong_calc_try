@@ -1,6 +1,6 @@
 import { useState } from "react";
-import make_haiso from "./utils/make_haiso";
-import pretty_haiso from "./utils/pretty_haiso";
+import make_haiso from "../utils/make_haiso";
+import pretty_haiso from "../utils/pretty_haiso";
 
 const TotalScore = () => {
     const [haiso, setHaiso] = useState("");
