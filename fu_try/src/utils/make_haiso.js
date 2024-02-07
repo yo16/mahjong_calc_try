@@ -91,7 +91,7 @@ function getRandomHai(hai_suu) {
     };
 }
 
-function getRandomMentsu() {
+export function getRandomMentsu(mentsu_type_rate = [4,3,1]) {
     // 鳴いていないか、上家、対面、下家から鳴いたかを選択
     const naki_rate_settings = [7,1,1,1];
     const naki_val = getRandomInt(naki_rate_settings[0]+naki_rate_settings[1]+naki_rate_settings[2]+naki_rate_settings[3]);
@@ -115,11 +115,10 @@ function getRandomMentsu() {
     }
     
     // 順子と刻子と槓子を選択
-    const rate_settings = [4,3,1];
-    const i = getRandomInt(rate_settings[0]+rate_settings[1]+rate_settings[2]);
+    const i = getRandomInt(mentsu_type_rate[0]+mentsu_type_rate[1]+mentsu_type_rate[2]);
 
     // 順子
-    if (i<rate_settings[0]) {
+    if (i<mentsu_type_rate[0]) {
         // 鳴くとしたら上家からのみ
         if (naki>=2){
             // 鳴かなかったことにする
@@ -170,7 +169,7 @@ function getRandomMentsu() {
         };
 
     // 刻子
-    } else if (i<rate_settings[0]+rate_settings[1]) {
+    } else if (i<mentsu_type_rate[0]+mentsu_type_rate[1]) {
         // 牌を決める
         const h = getRandomInt(34);
         const color = (h<9)?"m"
@@ -228,7 +227,7 @@ function getRandomMentsu() {
     } else {
         for (let i=0; i<4; i++) {
             if (i===(naki===3?3:naki-1)){
-                haiGL += curTypeStr.charAt(9+num);
+                haiGL += curTypeStr.charAt((color==="z"?7:9) + num);
             } else {
                 haiGL += curTypeStr.charAt(num);
             }
