@@ -10,18 +10,22 @@ const SITE_PAGES = [
     {
         url: "/",
         text: "トップページ",
+        elm: <TopPage />,
     },
     {
         url: "/fumentsu",
         text: "符 メンツ単独",
+        elm: <FuMentsu />,
     },
     {
         url: "/fugokei",
         text: "符 手全体",
+        elm: <FuGokei />,
     },
     {
         url: "/totalscore",
         text: "トータルスコア",
+        elm: <TotalScore />,
     },
 ];
 
@@ -35,21 +39,12 @@ const App = () => {
             </header>
             <main className="contents">
                 <Routes>
-                    <Route exact path="/" element={
-                        <TopPage />
-                    } />
-                    <Route exact path="/totalscore" element={
-                        <TotalScore />
-                    } />
-                    <Route path="/fumentsu" element={
-                        <FuMentsu />
-                    } />
-                    <Route path="/fugokei" element={
-                        <FuGokei />
-                    } />
-                    <Route path="*" element={
-                        <PageNotFound />
-                    } />
+                    {
+                        SITE_PAGES.map((p,i) => 
+                            <Route path={p.url} element={p.elm} key={`route_${i}`} />
+                        )
+                    }
+
                 </Routes>
             </main>
         </>
