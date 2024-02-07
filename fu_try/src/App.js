@@ -44,6 +44,7 @@ const App = () => {
                             <Route path={p.url} element={p.elm} key={`route_${i}`} />
                         )
                     }
+                    <Route path="*" element={<PageNotFound />} />
                 </Routes>
             </main>
         </>
