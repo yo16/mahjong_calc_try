@@ -16,3 +16,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.font-mahjong {
+  font-family: "GLMahjongTile";
+  font-size:60px;
+  white-space: nowrap;
+}
