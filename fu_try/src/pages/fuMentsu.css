@@ -1,0 +1,35 @@
+:root {
+    --hint-table-border-radius: 8px;
+}
+
+table, td {
+    margin: 10px 20px;
+    border: 1px solid rgb(126, 182, 126);
+    background-color: #eee;
+}
+table {
+    border-collapse: separate;
+    border-radius: var(--hint-table-border-radius);
+    border-spacing: 0px;
+}
+td {
+    padding: 4px 10px;
+    text-align: center;
+}
+td.hintHead {
+    background-color: rgb(193, 222, 193);
+}
+
+/* テーブルの角を丸く */
+table tr:first-child td:first-child {
+    border-radius: var(--hint-table-border-radius) 0 0 0;
+}
+table tr:first-child td:last-child {
+    border-radius: 0 var(--hint-table-border-radius) 0 0;
+}
+table tr:last-child td:first-child {
+    border-radius: 0 0 0 var(--hint-table-border-radius);
+}
+table tr:last-child td:last-child {
+    border-radius: 0 0 var(--hint-table-border-radius) 0;
+}

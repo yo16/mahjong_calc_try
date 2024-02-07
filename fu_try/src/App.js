@@ -32,9 +32,9 @@ const SITE_PAGES = [
 const App = () => {
     return (
         <>
-            <header>
+            <header className="flex flex-row">
                 {
-                    SITE_PAGES.map((p,i)=> <><Link to={p.url} key={`header_${i}`}>{p.text}</Link>｜</>)
+                    SITE_PAGES.map((p,i) => <Link to={p.url} key={`header_${i}`} className="p-3">{p.text}</Link>)
                 }
             </header>
             <main className="contents">
@@ -44,7 +44,6 @@ const App = () => {
                             <Route path={p.url} element={p.elm} key={`route_${i}`} />
                         )
                     }
-
                 </Routes>
             </main>
         </>
