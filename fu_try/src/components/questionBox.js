@@ -24,14 +24,15 @@ const QuestionBox = ({
     }
 
     const handleOnAnswer = (q_i, input_a_i) => {
+        onAnswer(q_i, input_a_i);
+
         if (currentQuestionIndex >= questions.length-1) {
             // 終了
-            setCurrentQuestionIndex(-1);
+            //setCurrentQuestionIndex(-1);
             onEndOfQuestions();
             return;
         }
 
-        onAnswer(q_i, input_a_i);
         setCurrentQuestionIndex(currentQuestionIndex+1);
     }
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import QuestionLine from "./questionLine";
 
 import "./questionList.css";
@@ -7,9 +7,7 @@ const QuestionList = ({
     questions = [],
     currentQuestionIndex = -1,
 }) => {
-    //const [currentIndex]
-
-    // 反転
+    // 表示用に反転
     const reverseQ = [...questions].reverse();
 
     return (

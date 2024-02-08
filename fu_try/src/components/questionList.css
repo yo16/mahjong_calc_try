@@ -1,8 +1,8 @@
 
 .qlist-container {
-    width: 300px;
+    width: 400px;
     height: 200px;
-    clip-path: inset(0 0 0 0);
+    overflow: auto;
 
     background-color: #fff;
     padding: 20px;

@@ -30,11 +30,13 @@ const FuMentsu = () => {
         setQuestions(qs);
     };
 
-    // 
+    // 開始
     const handleOnStart = () => {
         console.log("start!!!");
         createQuestions();
     }
+
+    // １つ回答
     const handleOnAnswer = (q_i, input_a_i) => {
         console.log(`answer!!!!:${q_i},${input_a_i}`);
         const cur_q = questions[q_i];
@@ -51,13 +53,15 @@ const FuMentsu = () => {
         ];
         setQuestions(newQuestions);
     };
+
+    // 全部終了
     const handleOnEndOfQuestions = () => {
         console.log("handleOnEndOfQuestions");
     }
 
     return (
         <>
-            符を当ててください！
+            １メンツの符を選択してください！
             <hr />
             <QuestionBox
                 questions={questions}
