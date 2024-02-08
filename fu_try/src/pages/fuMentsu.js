@@ -5,31 +5,66 @@
 */
 import { useState } from "react";
 import HaiStr from "../components/haiStr";
+import QuestionBox from "../components/questionBox";
 import { getRandomMentsu } from "../utils/make_haiso";
 
 import "./fuMentsu.css";
 
 const FuMentsu = () => {
-    const [haiStr, setHaiStr] = useState("");
+    const [questions, setQuestions] = useState([]);
 
-    const handleStart = () => {
-        // メンツを決める
-        const mentsu = getRandomMentsu([0,1,1]);
-        setHaiStr(mentsu.haiGL);
+    // 問題を作る
+    const createQuestions = () => {
+        let qs = [];
+        for (let i=0; i<10; i++) {
+            const mnt = getRandomMentsu([0,1,1]);
+            const correct_answer = [2,4,8,16,32].indexOf(mnt.fu);
+
+            qs.push({
+                question: mnt.haiGL,
+                answers: ["2符","4符","8符","16符","32符"],
+                correct_answer,
+                result: 0,      /* 0:未回答, 1:正解, -1:不正解 */
+            });
+        }
+        setQuestions(qs);
+    };
+
+    // 
+    const handleOnStart = () => {
+        console.log("start!!!");
+        createQuestions();
+    }
+    const handleOnAnswer = (q_i, input_a_i) => {
+        console.log(`answer!!!!:${q_i},${input_a_i}`);
+        const cur_q = questions[q_i];
+
+        // result 設定
+        const newQuestions = [
+            ...questions.slice(0, q_i),
+            {
+                ...cur_q,
+                result: (cur_q.correct_answer === input_a_i)? 1: -1,
+                aa: "ccc",
+            },
+            ...questions.slice(q_i+1),
+        ];
+        setQuestions(newQuestions);
+    };
+    const handleOnEndOfQuestions = () => {
+        console.log("handleOnEndOfQuestions");
     }
 
     return (
         <>
-            符を当ててください！<button onClick={handleStart}>開始</button>
+            符を当ててください！
             <hr />
-            <HaiStr>{haiStr}</HaiStr>
-            <div>
-                <button className="button-19">2符</button>
-                <button className="button-19">4符</button>
-                <button className="button-19">8符</button>
-                <button className="button-19">16符</button>
-                <button className="button-19">32符</button>
-            </div>
+            <QuestionBox
+                questions={questions}
+                onStart={handleOnStart}
+                onAnswer={handleOnAnswer}
+                onEndOfQuestions={handleOnEndOfQuestions}
+            />
             <hr />
             <table>
                 <tbody>

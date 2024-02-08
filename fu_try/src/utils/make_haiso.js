@@ -113,6 +113,7 @@ export function getRandomMentsu(mentsu_type_rate = [4,3,1]) {
         }
         naki_mark = naki_mark_def.charAt(naki-1);
     }
+    let fu = 0;
     
     // 順子と刻子と槓子を選択
     const i = getRandomInt(mentsu_type_rate[0]+mentsu_type_rate[1]+mentsu_type_rate[2]);
@@ -166,6 +167,7 @@ export function getRandomMentsu(mentsu_type_rate = [4,3,1]) {
             haiMj,
             haiGL,
             naki,
+            fu,
         };
 
     // 刻子
@@ -194,6 +196,13 @@ export function getRandomMentsu(mentsu_type_rate = [4,3,1]) {
                 haiGL += curTypeStr.charAt(((naki===i+1)?(color==="z"?7:9):0) + num);
             }
         }
+
+        // 符計算
+        fu = (
+            (color!=="z" && (num>=1) && (num<=7)) ? 2: 4
+        ) * (
+            (naki===0) ? 2: 1
+        );
         
         return {
             mentsuType:"kohtsu",
@@ -201,6 +210,7 @@ export function getRandomMentsu(mentsu_type_rate = [4,3,1]) {
             haiMj,
             haiGL,
             naki,
+            fu,
         };
     }
 
@@ -234,12 +244,20 @@ export function getRandomMentsu(mentsu_type_rate = [4,3,1]) {
         }
     }
 
+    // 符計算
+    fu = (
+        (color!=="z" && (num>=1) && (num<=7)) ? 8: 16
+    ) * (
+        (naki===0) ? 2: 1
+    );
+
     return {
         mentsuType:"kantsu",
         hai,
         haiMj,
         haiGL,
-        naki
+        naki,
+        fu,
     };
 }
 
