@@ -1,0 +1,21 @@
+.main_header {
+    background: linear-gradient(#4c9b4e, #4a944b);
+    height: 60px;
+}
+
+.main_header img {
+    height: 40px;
+}
+
+.main_header a {
+    color: rgb(180, 180, 187);
+    font-size:smaller;
+    transition: color 0.3s ease;
+}
+.main_header a:hover {
+    color: #fff;
+}
+
+.main_contents {
+    margin: 10px;
+}
