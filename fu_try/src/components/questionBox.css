@@ -6,12 +6,18 @@
     align-items: center;
 }
 
-.score {
-    text-align: right;
+.result_table {
     background-color: #fff;
-    padding: 10px 20px;
-    border-radius: 5px;
 }
-.score_point {
+.result_table th, .result_table td {
+    padding: 0px 10px;
+    border: 1px solid #eef;
+    text-align: center;
+}
+.result_table th {
+    font-weight: normal;
+    font-size: smaller;
+}
+.result_table td .result_value {
     font-size: larger;
 }

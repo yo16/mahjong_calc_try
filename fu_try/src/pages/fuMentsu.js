@@ -69,7 +69,7 @@ const FuMentsu = () => {
                 onEndOfQuestions={handleOnEndOfQuestions}
             />
             <hr />
-            <table>
+            <table id="hint_table">
                 <tbody>
                     <tr>
                         <td className="hintHead"></td>
