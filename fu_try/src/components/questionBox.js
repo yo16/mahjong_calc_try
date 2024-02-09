@@ -17,10 +17,12 @@ const QuestionBox = ({
     onEndOfQuestions = f => f,
 }) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(-1);
+    const [isStarting, setIsStarting] = useState(false);
 
     const handleOnStart = () => {
-        setCurrentQuestionIndex(0);
         onStart();
+        setCurrentQuestionIndex(0);
+        setIsStarting(true);
     }
 
     const handleOnAnswer = (q_i, input_a_i) => {
@@ -29,6 +31,7 @@ const QuestionBox = ({
         if (currentQuestionIndex >= questions.length-1) {
             // 終了
             //setCurrentQuestionIndex(-1);
+            setIsStarting(false);
             onEndOfQuestions();
             return;
         }
@@ -42,10 +45,10 @@ const QuestionBox = ({
                 questions = {questions}
                 currentQuestionIndex = {currentQuestionIndex}
             />
-            {(currentQuestionIndex<0) &&
+            {((currentQuestionIndex<0) || !isStarting) &&
                 <button className="button-19" onClick={handleOnStart}>開始?</button>
             }
-            {(currentQuestionIndex>=0) &&
+            {((currentQuestionIndex>=0) && isStarting) &&
                 questions[currentQuestionIndex].answers.map((a, i) => (
                     <button
                         onClick = {() => handleOnAnswer(currentQuestionIndex, i)}
