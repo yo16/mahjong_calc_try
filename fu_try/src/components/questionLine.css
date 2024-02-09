@@ -1,5 +1,42 @@
 
 .one_ql {
     display: flex;
-    position: relative;
+    align-items: center;
+
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px 0;
+    color: #888;
 }
+.one_ql.is_current_q {
+    border: 1px solid #ff0;
+    color: #111;
+}
+.one_ql.wrong_answer {
+    background-color: #fee;
+}
+
+.line_seq {
+    font-size: large;
+    width: 80px;
+    text-align: center;
+}
+.total_seq {
+    font-size:small;
+}
+
+.hai_str {
+    width: 180px;
+}
+
+.answer_result_mark {
+    padding-left: 20px;
+    width: 50px;
+}
+
+.answer_correct {
+    width: 60px;
+    text-align: right;
+}
+

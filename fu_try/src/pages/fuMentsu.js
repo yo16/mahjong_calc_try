@@ -37,8 +37,8 @@ const FuMentsu = () => {
     }
 
     // １つ回答
-    const handleOnAnswer = (q_i, input_a_i) => {
-        console.log(`answer!!!!:${q_i},${input_a_i}`);
+    const handleOnAnswer = (q_i, input_a_i, result) => {
+        console.log(`answer!!!!:${q_i},${input_a_i}, ${result}`);
         const cur_q = questions[q_i];
 
         // result 設定
@@ -46,7 +46,7 @@ const FuMentsu = () => {
             ...questions.slice(0, q_i),
             {
                 ...cur_q,
-                result: (cur_q.correct_answer === input_a_i)? 1: -1,
+                result,
                 aa: "ccc",
             },
             ...questions.slice(q_i+1),
@@ -61,8 +61,7 @@ const FuMentsu = () => {
 
     return (
         <>
-            １メンツの符を選択してください！
-            <hr />
+            <div className="questions_title">１メンツの符を選択してください！</div>
             <QuestionBox
                 questions={questions}
                 onStart={handleOnStart}

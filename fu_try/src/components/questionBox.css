@@ -1,0 +1,17 @@
+
+.control_panel {
+    display: flex;
+    width: 450px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.score {
+    text-align: right;
+    background-color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+.score_point {
+    font-size: larger;
+}

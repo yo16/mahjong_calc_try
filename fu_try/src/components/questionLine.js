@@ -1,3 +1,6 @@
+import { IoMdCloseCircle } from "react-icons/io";
+import { FaRegThumbsUp } from "react-icons/fa6";
+
 import HaiStr from "./haiStr";
 
 import "./questionLine.css";
@@ -11,23 +14,30 @@ const QuestionLine = ({
     display = false,
     isCurrentQ = true,
 }) => {
-    let style = {
+    // 基本のクラスと、isCurrentQのスタイル
+    let class_name = ["one_ql"];
+    if (isCurrentQ) {
+        class_name.push("is_current_q");
+    }
+    if (result===2) {
+        class_name.push("wrong_answer");
+    }
+
+    // 表示のON/OFF切り替え用
+    const style = {
         display: (display) ? "" : "none",
     };
-    if (isCurrentQ) {
-        style = {
-            ...style,
-            color: "#f00",
-        }
-    }
 
     return (
         <>
-            <div className="one_ql" style={style}>
-                <div>{qSeq+1}/<span>{qCount}</span></div>
-                <div><HaiStr>{question}</HaiStr></div>
-                <div>{(result===0)?"":(result===1)?"〇":"×"}</div>
-                <div>{(result===0)?"":answer}</div>
+            <div className={class_name.join(" ")} style={style}>
+                <div className="line_seq">{qSeq+1}/<span className="total_seq">{qCount}</span></div>
+                <div className="hai_str"><HaiStr>{question}</HaiStr></div>
+                <div className="answer_result_mark">{(result===0)?"":(result===1)?
+                    <FaRegThumbsUp color="#aaaacc" />:
+                    <IoMdCloseCircle color="#ee6666" />
+                }</div>
+                <div className="answer_correct">{(result===0)?"":answer}</div>
             </div>
         </>
     );
