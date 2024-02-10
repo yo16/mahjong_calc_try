@@ -1,8 +1,9 @@
 
 .qlist-container {
-    width: 450px;
     height: 300px;
     overflow: auto;
+    display: inline-block;
+    min-width: 400px;
 
     background-color: #fff;
     padding: 20px 10px;

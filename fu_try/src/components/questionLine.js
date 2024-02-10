@@ -15,7 +15,7 @@ const QuestionLine = ({
     isCurrentQ = true,
 }) => {
     // 基本のクラスと、isCurrentQのスタイル
-    let class_name = ["one_ql"];
+    let class_name = [];
     if (isCurrentQ) {
         class_name.push("is_current_q");
     }
@@ -30,7 +30,7 @@ const QuestionLine = ({
 
     return (
         <>
-            <div className={class_name.join(" ")} style={style}>
+            <div className={"one_ql "+class_name.join(" ")} style={style}>
                 <div className="line_seq">{qSeq+1}/<span className="total_seq">{qCount}</span></div>
                 <div className="hai_str"><HaiStr>{question}</HaiStr></div>
                 <div className="answer_result_mark">{(result===0)?"":(result===1)?
